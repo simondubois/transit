@@ -2,7 +2,7 @@ include .env
 
 all: check
 
-check: phpstan
+check: phpcs phpstan
 
 deploy:
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && git fetch"
@@ -11,6 +11,9 @@ deploy:
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && php-8.2 artisan config:cache"
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && php-8.2 artisan view:cache"
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && php-8.2 artisan route:cache"
+
+phpcs:
+	composer exec -- phpcs . -s --cache
 
 phpstan:
 	composer exec -- phpstan analyze -c phpstan.neon --no-progress
