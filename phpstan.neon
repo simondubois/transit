@@ -1,0 +1,22 @@
+includes:
+    - ./vendor/nunomaduro/larastan/extension.neon
+    - ./vendor/phpstan/phpstan-strict-rules/rules.neon
+    - ./vendor/phpstan/phpstan-webmozart-assert/extension.neon
+parameters:
+    checkBenevolentUnionTypes: true
+    checkDynamicProperties: true
+    checkImplicitMixed: true
+    checkModelProperties: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkUninitializedProperties: true
+    excludePaths:
+        - bootstrap
+        - config
+        - public
+        - storage
+        - vendor
+    level: 9
+    paths:
+        - .
+    rememberPossiblyImpureFunctionValues: false
+    reportAlwaysTrueInLastCondition: true
