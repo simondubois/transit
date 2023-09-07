@@ -2,7 +2,7 @@ include .env
 
 all: check
 
-check: phpcs phpstan
+check: php-cs-fixer phpcs phpstan
 
 deploy:
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && git fetch"
@@ -11,6 +11,9 @@ deploy:
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && php-8.2 artisan config:cache"
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && php-8.2 artisan view:cache"
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && php-8.2 artisan route:cache"
+
+php-cs-fixer:
+	composer exec -- php-cs-fixer fix --quiet
 
 phpcs:
 	composer exec -- phpcs . -s --cache
