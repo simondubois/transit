@@ -6,6 +6,7 @@ use App\Enums\AccountSyncStatus;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Account extends Model
 {
@@ -39,4 +40,13 @@ class Account extends Model
         'name',
         'default_location',
     ];
+
+    /**
+     * Get the calendars for the account.
+     * @return HasMany<Calendar>
+     */
+    public function calendars(): HasMany
+    {
+        return $this->hasMany(Calendar::class);
+    }
 }

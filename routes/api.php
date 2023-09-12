@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\CalendarController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,3 +17,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiSingleton('account', AccountController::class)->only('show', 'update');
+Route::apiResource('calendars', CalendarController::class)->scoped();
