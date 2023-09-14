@@ -5,6 +5,7 @@ namespace Tests\Http;
 use App\Enums\CalendarSyncStatus;
 use App\Models\Account;
 use App\Models\Calendar;
+use App\Models\Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
@@ -20,6 +21,7 @@ class CalendarDeleteTest extends TestCase
         // given
         $account = Account::factory()->createOne();
         $calendar = Calendar::factory()->for($account)->createOne();
+        $event = Event::factory()->for($calendar)->createOne();
 
         // when
         $response = $this->deleteJson('/' . Str::orderedUuid() . "/api/calendars/$calendar->id");
@@ -27,6 +29,7 @@ class CalendarDeleteTest extends TestCase
         // then
         $response->assertNotFound();
         $this->assertDatabaseHas('calendars', ['id' => $calendar->id]);
+        $this->assertDatabaseHas('events', ['id' => $event->id]);
     }
 
     /**
@@ -38,6 +41,7 @@ class CalendarDeleteTest extends TestCase
         $account1 = Account::factory()->createOne();
         $account2 = Account::factory()->createOne();
         $calendar = Calendar::factory()->for($account1)->createOne();
+        $event = Event::factory()->for($calendar)->createOne();
 
         // when
         $response = $this->deleteJson("/$account2->id/api/calendars/$calendar->id");
@@ -45,6 +49,7 @@ class CalendarDeleteTest extends TestCase
         // then
         $response->assertNotFound();
         $this->assertDatabaseHas('calendars', ['id' => $calendar->id]);
+        $this->assertDatabaseHas('events', ['id' => $event->id]);
     }
 
     /**
@@ -55,6 +60,7 @@ class CalendarDeleteTest extends TestCase
         // given
         $account = Account::factory()->createOne();
         $calendar = Calendar::factory()->for($account)->createOne();
+        Event::factory()->for($calendar)->createOne();
 
         // when
         $response = $this->deleteJson("/$account->id/api/calendars/$calendar->id");
@@ -62,5 +68,6 @@ class CalendarDeleteTest extends TestCase
         // then
         $response->assertNoContent();
         $this->assertDatabaseEmpty('calendars');
+        $this->assertDatabaseEmpty('events');
     }
 }

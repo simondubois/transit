@@ -62,6 +62,7 @@ class CalendarController
      */
     public function destroy(Account $account, Calendar $calendar): Response
     {
+        $calendar->events()->getQuery()->delete();
         $calendar->delete();
 
         return new Response('', Response::HTTP_NO_CONTENT);
