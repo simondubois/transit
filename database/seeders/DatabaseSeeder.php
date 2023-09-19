@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        $this->call(StopSeeder::class);
         $this->call(AccountSeeder::class);
         $this->call(CalendarSeeder::class);
 
