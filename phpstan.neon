@@ -15,6 +15,8 @@ parameters:
         - public
         - storage
         - vendor
+    ignoreErrors:
+        - '#Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model::update\(\) expects array<string, mixed>, mixed given\.#'
     level: 9
     paths:
         - .

@@ -1,6 +1,6 @@
 include .env
 
-all: check
+all: check test
 
 check: php-cs-fixer phpcs phpmd phpstan
 
@@ -29,3 +29,6 @@ start:
 
 stop:
 	./vendor/bin/sail stop
+
+test:
+	php artisan test
