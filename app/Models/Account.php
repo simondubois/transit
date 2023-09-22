@@ -3,10 +3,13 @@
 namespace App\Models;
 
 use App\Enums\AccountSyncStatus;
+use App\Enums\LogStatus;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Account extends Model
 {
@@ -48,5 +51,27 @@ class Account extends Model
     public function calendars(): HasMany
     {
         return $this->hasMany(Calendar::class);
+    }
+
+    /**
+     * Get all of the account's logs.
+     * @return MorphMany<Log>
+     */
+    public function logs(): MorphMany
+    {
+        return $this->morphMany(Log::class, 'holder');
+    }
+
+    /**
+     * Get the last synced date.
+     */
+    public function getLastSyncedAtAttribute(): ?Carbon
+    {
+        return $this->logs()
+            ->getQuery()
+            ->where('status', LogStatus::Completed)
+            ->latest('job_started_at')
+            ->first()
+            ?->job_started_at;
     }
 }

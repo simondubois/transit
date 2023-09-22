@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 /**
  * @property-read Account $account
@@ -41,5 +42,14 @@ class Calendar extends Model
     public function events(): HasMany
     {
         return $this->hasMany(Event::class);
+    }
+
+    /**
+     * Get all of the calendar's logs.
+     * @return MorphMany<Log>
+     */
+    public function logs(): MorphMany
+    {
+        return $this->morphMany(Log::class, 'holder');
     }
 }
