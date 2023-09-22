@@ -16,6 +16,7 @@ parameters:
         - storage
         - vendor
     ignoreErrors:
+        - '#Access to an undefined property Sabre\\VObject\\#'
         - '#Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\.*::create\(\) expects array<string, mixed>, mixed given\.#'
         - '#Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model::update\(\) expects array<string, mixed>, mixed given\.#'
     level: 9

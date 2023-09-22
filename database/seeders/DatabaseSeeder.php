@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Jobs\SyncAccountJob;
+use App\Models\Account;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,5 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AccountSeeder::class);
         $this->call(CalendarSeeder::class);
+
+        Account::all()->each(fn (Account $account) => SyncAccountJob::dispatchSync($account));
     }
 }

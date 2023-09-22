@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AccountRequest;
 use App\Http\Requests\UpdateAccountRequest;
 use App\Http\Resources\AccountResource;
+use App\Jobs\SyncAccountJob;
 use App\Models\Account;
+use Illuminate\Http\Response;
 
 class AccountController
 {
@@ -27,5 +29,15 @@ class AccountController
         return new AccountResource(
             tap($account)->update($request->validated())
         );
+    }
+
+    /**
+     * Sync the specified resource data.
+     */
+    public function sync(Account $account): Response
+    {
+        SyncAccountJob::dispatchSync($account);
+
+        return new Response('', Response::HTTP_NO_CONTENT);
     }
 }

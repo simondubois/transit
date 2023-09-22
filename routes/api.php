@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('account/sync', [AccountController::class, 'sync']);
 Route::apiSingleton('account', AccountController::class)->only('show', 'update');
 Route::apiResource('calendars', CalendarController::class)->scoped();
 Route::apiResource('calendars.events', EventController::class)->scoped()->only('index');
