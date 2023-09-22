@@ -2,7 +2,7 @@ include .env
 
 all: check
 
-check: php-cs-fixer phpcs phpstan
+check: php-cs-fixer phpcs phpmd phpstan
 
 deploy:
 	ssh ${DEPLOY_HOST} "cd ${DEPLOY_PATH} && git fetch"
@@ -17,6 +17,9 @@ php-cs-fixer:
 
 phpcs:
 	composer exec -- phpcs . -s --cache
+
+phpmd:
+	composer exec -- phpmd . text phpmd.xml --cache
 
 phpstan:
 	composer exec -- phpstan analyze -c phpstan.neon --no-progress
