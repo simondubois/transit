@@ -54,6 +54,15 @@ class Account extends Model
     }
 
     /**
+     * Get the itineraries for the account.
+     * @return HasMany<Itinerary>
+     */
+    public function itineraries(): HasMany
+    {
+        return $this->hasMany(Itinerary::class);
+    }
+
+    /**
      * Get all of the account's logs.
      * @return MorphMany<Log>
      */
