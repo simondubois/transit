@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Account extends Model
@@ -69,6 +70,15 @@ class Account extends Model
     public function logs(): MorphMany
     {
         return $this->morphMany(Log::class, 'holder');
+    }
+
+    /**
+     * Get all of the rides for the account.
+     * @return HasManyThrough<Ride>
+     */
+    public function rides(): HasManyThrough
+    {
+        return $this->hasManyThrough(Ride::class, Itinerary::class);
     }
 
     /**
