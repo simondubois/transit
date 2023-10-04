@@ -17,5 +17,9 @@ enum LogStatus: string
     case DeletingStops = 'deleting_stops';
     case CreatingStops = 'creating_stops';
 
+    // \App\Jobs\SyncRidesJob
+    case DeletingRides = 'deleting_rides';
+    case DispatchingRides = 'dispatching_rides';
+
     case Completed = 'completed';
 }

@@ -17,6 +17,7 @@ parameters:
         - vendor
     ignoreErrors:
         - '#Access to an undefined property Sabre\\VObject\\#'
+        - '#Dynamic call to static method Illuminate\\Database\\Eloquent\\Builder<.*>::whereRaw\(\)\.#'
         - '#Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\.*::create\(\) expects array<string, mixed>, mixed given\.#'
         - '#Parameter \#1 \$attributes of method Illuminate\\Database\\Eloquent\\Model::update\(\) expects array<string, mixed>, mixed given\.#'
     level: 9

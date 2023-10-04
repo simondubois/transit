@@ -35,6 +35,7 @@ class SyncAccountJob
 
         try {
             $this->account->calendars->each([SyncEventsJob::class, 'dispatchSync']);
+            SyncRidesJob::dispatchSync($this->account);
         } finally {
             $this->after();
         }

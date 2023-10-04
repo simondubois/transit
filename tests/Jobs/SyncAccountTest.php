@@ -5,6 +5,7 @@ namespace Tests\Jobs;
 use App\Enums\AccountSyncStatus;
 use App\Jobs\SyncAccountJob;
 use App\Jobs\SyncEventsJob;
+use App\Jobs\SyncRidesJob;
 use App\Models\Account;
 use App\Models\Calendar;
 use Illuminate\Support\Facades\Bus;
@@ -21,7 +22,7 @@ class SyncAccountTest extends TestCase
         $account = Account::factory()->createOne(['current_sync_status' => AccountSyncStatus::Idle]);
         $calendar1 = Calendar::factory()->for($account)->createOne();
         $calendar2 = Calendar::factory()->for($account)->createOne();
-        Bus::fake([SyncEventsJob::class]);
+        Bus::fake([SyncEventsJob::class, SyncRidesJob::class]);
 
         // when
         SyncAccountJob::dispatchSync($account);
@@ -29,6 +30,7 @@ class SyncAccountTest extends TestCase
         // then
         Bus::assertDispatchedSync(fn (SyncEventsJob $job) => $job->calendar->is($calendar1), 1);
         Bus::assertDispatchedSync(fn (SyncEventsJob $job) => $job->calendar->is($calendar2), 1);
+        Bus::assertDispatchedSync(fn (SyncRidesJob $job) => $job->account->is($account), 1);
         $this->assertDatabaseHas('accounts', [
             'id' => $account->id,
             'current_sync_status' => AccountSyncStatus::Idle,
@@ -44,13 +46,14 @@ class SyncAccountTest extends TestCase
         $account = Account::factory()->createOne(['current_sync_status' => AccountSyncStatus::Running]);
         Calendar::factory()->for($account)->createOne();
         Calendar::factory()->for($account)->createOne();
-        Bus::fake([SyncEventsJob::class]);
+        Bus::fake([SyncEventsJob::class, SyncRidesJob::class]);
 
         // when
         SyncAccountJob::dispatchSync($account);
 
         // then
         Bus::assertNotDispatchedSync(SyncEventsJob::class);
+        Bus::assertNotDispatchedSync(SyncRidesJob::class);
         $this->assertDatabaseHas('accounts', [
             'id' => $account->id,
             'current_sync_status' => AccountSyncStatus::Triggered,
@@ -66,13 +69,14 @@ class SyncAccountTest extends TestCase
         $account = Account::factory()->createOne(['current_sync_status' => AccountSyncStatus::Triggered]);
         Calendar::factory()->for($account)->createOne();
         Calendar::factory()->for($account)->createOne();
-        Bus::fake([SyncEventsJob::class]);
+        Bus::fake([SyncEventsJob::class, SyncRidesJob::class]);
 
         // when
         SyncAccountJob::dispatchSync($account);
 
         // then
         Bus::assertNotDispatchedSync(SyncEventsJob::class);
+        Bus::assertNotDispatchedSync(SyncRidesJob::class);
         $this->assertDatabaseHas('accounts', [
             'id' => $account->id,
             'current_sync_status' => AccountSyncStatus::Triggered,
