@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Agenda;
 use App\Models\Account;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function (Account $account) {
-    return view('welcome');
-});
+Route::get('/', fn (Account $account) => redirect()->route('agenda', ['account' => $account]));
+Route::get('/agenda', Agenda::class)->name('agenda');

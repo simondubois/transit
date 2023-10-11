@@ -9,9 +9,9 @@ use Tests\TestCase;
 class WebTest extends TestCase
 {
     /**
-     * Test unknown account.
+     * Test root unknown account.
      */
-    public function testUnknownAccount(): void
+    public function testRootUnknownAccount(): void
     {
         // given
 
@@ -23,15 +23,44 @@ class WebTest extends TestCase
     }
 
     /**
-     * Test Ok response.
+     * Test root redirect.
      */
-    public function testOk(): void
+    public function testRootRedirect(): void
     {
         // given
         $account = Account::factory()->createOne();
 
         // when
         $response = $this->get("/$account->id");
+
+        // then
+        $response->assertRedirectToRoute('agenda', ['account' => $account]);
+    }
+
+    /**
+     * Test agenda unknown account.
+     */
+    public function testAgendaUnknownAccount(): void
+    {
+        // given
+
+        // when
+        $response = $this->get(Str::orderedUuid() . '/agenda');
+
+        // then
+        $response->assertNotFound();
+    }
+
+    /**
+     * Test agenda view.
+     */
+    public function testAgendaView(): void
+    {
+        // given
+        $account = Account::factory()->createOne();
+
+        // when
+        $response = $this->get("/$account->id/agenda");
 
         // then
         $response->assertOk();
